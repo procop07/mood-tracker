@@ -40,16 +40,25 @@ class MoodTracker {
             return;
         }
 
+        // Get values from all form inputs
+        const mood = document.getElementById('mood').value || this.selectedMood;
+        const energy = document.getElementById('energy').value;
+        const anxiety = document.getElementById('anxiety').value;
+        const irritability = document.getElementById('irritability').value;
         const notes = document.getElementById('notes').value;
+
         const moodData = {
-            mood: this.selectedMood,
+            mood: mood,
+            energy: energy,
+            anxiety: anxiety,
+            irritability: irritability,
             notes: notes,
             date: new Date().toLocaleDateString(),
             time: new Date().toLocaleTimeString()
         };
 
         try {
-            const response = await fetch(`${this.apiBaseUrl}/api/moods`, {
+            const response = await fetch(`${this.apiBaseUrl}/api/submit`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -131,8 +140,14 @@ class MoodTracker {
             btn.classList.remove('selected');
         });
         
-        // Clear notes
-        document.getElementById('notes').value = '';
+        // Clear all form inputs
+        const inputs = ['mood', 'energy', 'anxiety', 'irritability', 'notes'];
+        inputs.forEach(inputId => {
+            const element = document.getElementById(inputId);
+            if (element) {
+                element.value = '';
+            }
+        });
         
         // Reset selected mood
         this.selectedMood = null;
