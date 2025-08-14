@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mood Tracker</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Mood Tracker</h1>
+            <p>Track your daily mood and feelings</p>
+        </header>
+
+        <main>
+            <form id="mood-form" class="mood-form">
+                <!-- Mood Scale -6 to +6 -->
+                <div class="form-group">
+                    <label for="mood">Mood Scale (-6 to +6)</label>
+                    <div class="mood-scale">
+                        <span class="scale-label">Very Bad (-6)</span>
+                        <input type="range" id="mood" name="mood" min="-6" max="6" value="0" class="slider mood-slider">
+                        <span class="scale-label">Very Good (+6)</span>
+                    </div>
+                    <div class="mood-value">Current: <span id="mood-value">0</span></div>
+                </div>
+
+                <!-- Energy Level Slider -->
+                <div class="form-group">
+                    <label for="energy">Energy Level (0-10)</label>
+                    <div class="slider-container">
+                        <span class="scale-label">Low (0)</span>
+                        <input type="range" id="energy" name="energy" min="0" max="10" value="5" class="slider">
+                        <span class="scale-label">High (10)</span>
+                    </div>
+                    <div class="slider-value">Current: <span id="energy-value">5</span></div>
+                </div>
+
+                <!-- Anxiety Level Slider -->
+                <div class="form-group">
+                    <label for="anxiety">Anxiety Level (0-10)</label>
+                    <div class="slider-container">
+                        <span class="scale-label">None (0)</span>
+                        <input type="range" id="anxiety" name="anxiety" min="0" max="10" value="0" class="slider">
+                        <span class="scale-label">High (10)</span>
+                    </div>
+                    <div class="slider-value">Current: <span id="anxiety-value">0</span></div>
+                </div>
+
+                <!-- Irritability Level Slider -->
+                <div class="form-group">
+                    <label for="irritability">Irritability Level (0-10)</label>
+                    <div class="slider-container">
+                        <span class="scale-label">None (0)</span>
+                        <input type="range" id="irritability" name="irritability" min="0" max="10" value="0" class="slider">
+                        <span class="scale-label">High (10)</span>
+                    </div>
+                    <div class="slider-value">Current: <span id="irritability-value">0</span></div>
+                </div>
+
+                <!-- Notes Textarea -->
+                <div class="form-group">
+                    <label for="notes">Notes (optional)</label>
+                    <textarea id="notes" name="notes" rows="4" placeholder="Add any additional notes about your mood or day..."></textarea>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="form-group">
+                    <button type="submit" class="submit-btn">Submit Mood Entry</button>
+                </div>
+            </form>
+
+            <!-- Results Display -->
+            <div id="results" class="results-section" style="display: none;">
+                <h2>Your Mood Entry</h2>
+                <div id="mood-summary"></div>
+            </div>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
