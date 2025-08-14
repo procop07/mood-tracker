@@ -21,7 +21,43 @@ jobs:
         cache: 'npm'
         
     - name: Install dependencies
-      run: npm ci
+      run: |
+        # Install dependencies for backend if it exists
+        if [ -d "backend" ]; then
+          cd backend
+          if [ -f "package-lock.json" ]; then
+            echo "Installing backend dependencies with npm ci"
+            npm ci
+          else
+            echo "Installing backend dependencies with npm install"
+            npm install
+          fi
+          cd ..
+        fi
+        
+        # Install dependencies for frontend if it exists
+        if [ -d "frontend" ]; then
+          cd frontend
+          if [ -f "package-lock.json" ]; then
+            echo "Installing frontend dependencies with npm ci"
+            npm ci
+          else
+            echo "Installing frontend dependencies with npm install"
+            npm install
+          fi
+          cd ..
+        fi
+        
+        # Install dependencies in root if no backend/frontend dirs exist
+        if [ ! -d "backend" ] && [ ! -d "frontend" ]; then
+          if [ -f "package-lock.json" ]; then
+            echo "Installing root dependencies with npm ci"
+            npm ci
+          else
+            echo "Installing root dependencies with npm install"
+            npm install
+          fi
+        fi
       
     - name: Start backend server
       run: |
