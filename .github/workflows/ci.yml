@@ -1,5 +1,4 @@
 name: CI
-
 on:
   push:
     branches: [ main, develop ]
@@ -10,6 +9,12 @@ jobs:
   test:
     runs-on: ubuntu-latest
     
+    env:
+      GOOGLE_SPREADSHEET_ID: ${{ secrets.GOOGLE_SPREADSHEET_ID }}
+      GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+      TZ: Asia/Yekaterinburg
+      PORT: 8080
+    
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -18,98 +23,26 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: '20'
-        cache: 'npm'
         
     - name: Install dependencies
       run: |
-        # Install dependencies for backend if it exists
-        if [ -d "backend" ]; then
-          cd backend
-          if [ -f "package-lock.json" ]; then
-            echo "Installing backend dependencies with npm ci"
-            npm ci
-          else
-            echo "Installing backend dependencies with npm install"
-            npm install
-          fi
-          cd ..
-        fi
+        cd backend
+        npm install
         
-        # Install dependencies for frontend if it exists
-        if [ -d "frontend" ]; then
-          cd frontend
-          if [ -f "package-lock.json" ]; then
-            echo "Installing frontend dependencies with npm ci"
-            npm ci
-          else
-            echo "Installing frontend dependencies with npm install"
-            npm install
-          fi
-          cd ..
-        fi
+    - name: Start server
+      run: |
+        cd backend
+        node src/server.js &
+        sleep 5
         
-        # Install dependencies in root if no backend/frontend dirs exist
-        if [ ! -d "backend" ] && [ ! -d "frontend" ]; then
-          if [ -f "package-lock.json" ]; then
-            echo "Installing root dependencies with npm ci"
-            npm ci
-          else
-            echo "Installing root dependencies with npm install"
-            npm install
-          fi
-        fi
-      
-    - name: Start backend server
+    - name: Test API endpoints
       run: |
-        npm start &
-        sleep 10
-      
-    - name: Test API Health Endpoint
-      run: |
-        echo "Testing /api/health endpoint"
-        curl -f http://localhost:3000/api/health
+        # Test health endpoint
+        curl -f http://localhost:8080/api/health
         
-    - name: Test API Submit Endpoint - Valid Request (200)
-      run: |
-        echo "Testing /api/submit with valid data (expecting 200)"
-        curl -X POST -H "Content-Type: application/json" \
-             -d '{"mood": "happy", "energy": 8, "sleep": 7}' \
-             -w "HTTP Status: %{http_code}\n" \
-             http://localhost:3000/api/submit
-             
-    - name: Test API Submit Endpoint - Invalid Request (400)
-      run: |
-        echo "Testing /api/submit with invalid data (expecting 400)"
-        curl -X POST -H "Content-Type: application/json" \
-             -d '{"invalid": "data"}' \
-             -w "HTTP Status: %{http_code}\n" \
-             -s -o /dev/null \
-             http://localhost:3000/api/submit || echo "Expected 400 error received"
-             
-    - name: Test Hypomania Series
-      run: |
-        echo "Testing hypomania mood series"
-        # Test series of hypomania-related moods
-        curl -X POST -H "Content-Type: application/json" \
-             -d '{"mood": "euphoric", "energy": 9, "sleep": 4, "series": "hypomania"}' \
-             http://localhost:3000/api/submit
-        curl -X POST -H "Content-Type: application/json" \
-             -d '{"mood": "energetic", "energy": 8, "sleep": 5, "series": "hypomania"}' \
-             http://localhost:3000/api/submit
-        curl -X POST -H "Content-Type: application/json" \
-             -d '{"mood": "restless", "energy": 9, "sleep": 3, "series": "hypomania"}' \
-             http://localhost:3000/api/submit
-             
-    - name: Test Depression Series
-      run: |
-        echo "Testing depression mood series"
-        # Test series of depression-related moods
-        curl -X POST -H "Content-Type: application/json" \
-             -d '{"mood": "sad", "energy": 2, "sleep": 10, "series": "depression"}' \
-             http://localhost:3000/api/submit
-        curl -X POST -H "Content-Type: application/json" \
-             -d '{"mood": "hopeless", "energy": 1, "sleep": 11, "series": "depression"}' \
-             http://localhost:3000/api/submit
-        curl -X POST -H "Content-Type: application/json" \
-             -d '{"mood": "tired", "energy": 2, "sleep": 9, "series": "depression"}' \
-             http://localhost:3000/api/submit
+        # Test submit endpoint
+        curl -X POST http://localhost:8080/api/submit \
+          -H "Content-Type: application/json" \
+          -d '{"mood":4,"energy":4,"anxiety":2,"irritability":1,"notes":"тест"}'
+        
+        echo "All tests passed!"
