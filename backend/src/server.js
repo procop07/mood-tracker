@@ -19,7 +19,7 @@ app.use(morgan('combined'));
 app.use(express.json());
 
 // Health check endpoint for testing
-app.get('/health', (req, res) => {
+app.get('/api/health', (req, res) => {
   res.status(200).json({
     status: 'OK',
     message: 'Mood Tracker API is running',
@@ -28,7 +28,6 @@ app.get('/health', (req, res) => {
 });
 
 // API Routes
-
 // POST /api/submit - Submit mood data with validation, Google Sheets write, and analytics recomputation
 app.post('/api/submit', async (req, res) => {
   try {
@@ -174,7 +173,6 @@ app.post('/api/submit', async (req, res) => {
         summaryStats: summaryStats
       }
     });
-
   } catch (error) {
     console.error('Error in /api/submit:', error);
     res.status(500).json({
@@ -269,7 +267,7 @@ app.use('*', (req, res) => {
 // Start server
 app.listen(PORT, () => {
   console.log(`Mood Tracker API server is running on port ${PORT}`);
-  console.log(`Health check available at: http://localhost:${PORT}/health`);
+  console.log(`Health check available at: http://localhost:${PORT}/api/health`);
 });
 
 module.exports = app;
