@@ -1,0 +1,2 @@
+Manual CI trigger created at 2025-08-14T18:59:00+05:00
+This file triggers the CI workflow by making a commit to main branch.
