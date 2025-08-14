@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "dev": "nodemon server.js",
-    "start": "node server.js",
+    "start": "node src/server.js",
     "test": "curl -X GET http://localhost:3000/health"
   },
   "keywords": ["mood", "tracker", "api", "express"],
