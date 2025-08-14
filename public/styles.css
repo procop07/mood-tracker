@@ -1,0 +1,372 @@
+/* Modern Mood Tracker Styles */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  color: #333;
+  line-height: 1.6;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Header Styles */
+.header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.header h1 {
+  color: white;
+  font-size: 2.5rem;
+  font-weight: 300;
+  margin-bottom: 10px;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.header p {
+  color: rgba(255,255,255,0.9);
+  font-size: 1.1rem;
+}
+
+/* Main Content Card */
+.mood-card {
+  background: rgba(255,255,255,0.95);
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+/* Mood Selection Buttons */
+.mood-selection {
+  margin-bottom: 30px;
+}
+
+.mood-selection h2 {
+  text-align: center;
+  margin-bottom: 25px;
+  color: #2d3748;
+  font-weight: 600;
+}
+
+.mood-buttons {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 15px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.mood-btn {
+  background: linear-gradient(145deg, #f7fafc, #edf2f7);
+  border: 2px solid transparent;
+  border-radius: 15px;
+  padding: 20px 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #4a5568;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.07);
+}
+
+.mood-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+  border-color: #667eea;
+}
+
+.mood-btn.active {
+  background: linear-gradient(145deg, #667eea, #764ba2);
+  color: white;
+  border-color: #667eea;
+  box-shadow: 0 8px 20px rgba(102,126,234,0.3);
+}
+
+.mood-btn .emoji {
+  font-size: 2rem;
+  display: block;
+  margin-bottom: 8px;
+}
+
+/* Slider Styles */
+.slider-section {
+  margin-bottom: 30px;
+}
+
+.slider-section h3 {
+  color: #2d3748;
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+.slider-container {
+  margin-bottom: 25px;
+}
+
+.slider-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  color: #4a5568;
+  font-weight: 500;
+}
+
+.slider-value {
+  background: #667eea;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+/* Custom Range Slider */
+.slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 8px;
+  border-radius: 5px;
+  background: #e2e8f0;
+  outline: none;
+  opacity: 0.7;
+  transition: opacity 0.3s;
+}
+
+.slider:hover {
+  opacity: 1;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #667eea, #764ba2);
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(102,126,234,0.3);
+  transition: all 0.3s ease;
+}
+
+.slider::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 12px rgba(102,126,234,0.4);
+}
+
+.slider::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #667eea, #764ba2);
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 4px 8px rgba(102,126,234,0.3);
+}
+
+/* Action Buttons */
+.action-buttons {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-top: 30px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  padding: 15px 30px;
+  border: none;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 140px;
+  justify-content: center;
+}
+
+.btn-primary {
+  background: linear-gradient(145deg, #667eea, #764ba2);
+  color: white;
+  box-shadow: 0 4px 15px rgba(102,126,234,0.3);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(102,126,234,0.4);
+}
+
+.btn-secondary {
+  background: linear-gradient(145deg, #f7fafc, #edf2f7);
+  color: #4a5568;
+  border: 2px solid #e2e8f0;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.07);
+}
+
+.btn-secondary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+  border-color: #cbd5e0;
+}
+
+/* Notes Section */
+.notes-section {
+  margin-top: 30px;
+}
+
+.notes-section h3 {
+  color: #2d3748;
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+.notes-textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 15px;
+  border: 2px solid #e2e8f0;
+  border-radius: 15px;
+  font-family: inherit;
+  font-size: 1rem;
+  line-height: 1.5;
+  resize: vertical;
+  transition: border-color 0.3s ease;
+}
+
+.notes-textarea:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .container {
+    padding: 15px;
+  }
+  
+  .header h1 {
+    font-size: 2rem;
+  }
+  
+  .mood-card {
+    padding: 25px;
+    border-radius: 15px;
+  }
+  
+  .mood-buttons {
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 10px;
+  }
+  
+  .mood-btn {
+    padding: 15px 10px;
+  }
+  
+  .mood-btn .emoji {
+    font-size: 1.5rem;
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .btn {
+    width: 100%;
+    max-width: 300px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header h1 {
+    font-size: 1.8rem;
+  }
+  
+  .mood-card {
+    padding: 20px;
+  }
+  
+  .mood-buttons {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .mood-card {
+    background: rgba(45, 55, 72, 0.95);
+    color: #e2e8f0;
+  }
+  
+  .mood-selection h2,
+  .slider-section h3,
+  .notes-section h3 {
+    color: #e2e8f0;
+  }
+  
+  .slider-label {
+    color: #cbd5e0;
+  }
+  
+  .notes-textarea {
+    background: #2d3748;
+    border-color: #4a5568;
+    color: #e2e8f0;
+  }
+  
+  .notes-textarea:focus {
+    border-color: #667eea;
+  }
+}
+
+/* Animation classes */
+.fade-in {
+  animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.pulse {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
