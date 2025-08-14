@@ -1,0 +1,79 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js 20
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Start backend server
+      run: |
+        npm start &
+        sleep 10
+      
+    - name: Test API Health Endpoint
+      run: |
+        echo "Testing /api/health endpoint"
+        curl -f http://localhost:3000/api/health
+        
+    - name: Test API Submit Endpoint - Valid Request (200)
+      run: |
+        echo "Testing /api/submit with valid data (expecting 200)"
+        curl -X POST -H "Content-Type: application/json" \
+             -d '{"mood": "happy", "energy": 8, "sleep": 7}' \
+             -w "HTTP Status: %{http_code}\n" \
+             http://localhost:3000/api/submit
+             
+    - name: Test API Submit Endpoint - Invalid Request (400)
+      run: |
+        echo "Testing /api/submit with invalid data (expecting 400)"
+        curl -X POST -H "Content-Type: application/json" \
+             -d '{"invalid": "data"}' \
+             -w "HTTP Status: %{http_code}\n" \
+             -s -o /dev/null \
+             http://localhost:3000/api/submit || echo "Expected 400 error received"
+             
+    - name: Test Hypomania Series
+      run: |
+        echo "Testing hypomania mood series"
+        # Test series of hypomania-related moods
+        curl -X POST -H "Content-Type: application/json" \
+             -d '{"mood": "euphoric", "energy": 9, "sleep": 4, "series": "hypomania"}' \
+             http://localhost:3000/api/submit
+        curl -X POST -H "Content-Type: application/json" \
+             -d '{"mood": "energetic", "energy": 8, "sleep": 5, "series": "hypomania"}' \
+             http://localhost:3000/api/submit
+        curl -X POST -H "Content-Type: application/json" \
+             -d '{"mood": "restless", "energy": 9, "sleep": 3, "series": "hypomania"}' \
+             http://localhost:3000/api/submit
+             
+    - name: Test Depression Series
+      run: |
+        echo "Testing depression mood series"
+        # Test series of depression-related moods
+        curl -X POST -H "Content-Type: application/json" \
+             -d '{"mood": "sad", "energy": 2, "sleep": 10, "series": "depression"}' \
+             http://localhost:3000/api/submit
+        curl -X POST -H "Content-Type: application/json" \
+             -d '{"mood": "hopeless", "energy": 1, "sleep": 11, "series": "depression"}' \
+             http://localhost:3000/api/submit
+        curl -X POST -H "Content-Type: application/json" \
+             -d '{"mood": "tired", "energy": 2, "sleep": 9, "series": "depression"}' \
+             http://localhost:3000/api/submit
