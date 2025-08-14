@@ -189,6 +189,94 @@ class GoogleSheetsService {
       throw error;
     }
   }
+
+  // Setup all required sheets with proper headers for mood tracking
+  async setupMoodTrackingSheets(spreadsheetId) {
+    try {
+      const results = {
+        sheetsCreated: [],
+        headersCreated: [],
+        errors: []
+      };
+
+      // Define sheet schemas
+      const sheetSchemas = {
+        'raw': ['timestamp', 'date', 'mood', 'energy', 'anxiety', 'irritability', 'notes'],
+        'mood': ['timestamp', 'date', 'value'],
+        'energy': ['timestamp', 'date', 'value'],
+        'anxiety': ['timestamp', 'date', 'value'],
+        'irritability': ['timestamp', 'date', 'value'],
+        'notes': ['timestamp', 'date', 'value'],
+        'summary': [
+          'date', 'mood_mean7', 'energy_mean7', 'anxiety_mean7', 'irritability_mean7',
+          'z_mood', 'trend_mood', 'risk_hypomania', 'risk_depression', 'reason'
+        ]
+      };
+
+      // Setup each sheet with its headers
+      for (const [sheetName, headers] of Object.entries(sheetSchemas)) {
+        try {
+          console.log(`Setting up sheet: ${sheetName}`);
+          
+          // Ensure sheet exists and headers are set
+          const headerResult = await this.ensureHeaders(spreadsheetId, sheetName, headers);
+          
+          results.sheetsCreated.push(sheetName);
+          if (headerResult.created) {
+            results.headersCreated.push(sheetName);
+          }
+          
+          console.log(`✓ Sheet '${sheetName}' setup complete`);
+        } catch (error) {
+          console.error(`Error setting up sheet '${sheetName}':`, error);
+          results.errors.push({ sheet: sheetName, error: error.message });
+        }
+      }
+
+      console.log('Mood tracking sheets setup completed:', results);
+      return results;
+    } catch (error) {
+      console.error('Error in setupMoodTrackingSheets:', error);
+      throw error;
+    }
+  }
+
+  // Verify all required sheets exist with proper headers
+  async verifyMoodTrackingSetup(spreadsheetId) {
+    try {
+      const requiredSheets = ['raw', 'mood', 'energy', 'anxiety', 'irritability', 'notes', 'summary'];
+      const verification = {
+        allSheetsExist: true,
+        sheetsStatus: {},
+        missingSheets: []
+      };
+
+      for (const sheetName of requiredSheets) {
+        try {
+          const headers = await this.readData(spreadsheetId, `${sheetName}!1:1`);
+          verification.sheetsStatus[sheetName] = {
+            exists: true,
+            hasHeaders: headers && headers.length > 0 && headers[0].length > 0,
+            headers: headers?.[0] || []
+          };
+        } catch (error) {
+          verification.allSheetsExist = false;
+          verification.missingSheets.push(sheetName);
+          verification.sheetsStatus[sheetName] = {
+            exists: false,
+            hasHeaders: false,
+            headers: [],
+            error: error.message
+          };
+        }
+      }
+
+      return verification;
+    } catch (error) {
+      console.error('Error verifying mood tracking setup:', error);
+      throw error;
+    }
+  }
 }
 
 module.exports = GoogleSheetsService;
